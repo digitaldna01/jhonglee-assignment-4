@@ -6,7 +6,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 import nltk
 from nltk.corpus import stopwords
-nltk.download()
+
 nltk.download('stopwords')
 
 app = Flask(__name__)
