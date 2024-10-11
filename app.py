@@ -31,7 +31,6 @@ def search_engine(query):
     Input: query (str)
     Output: documents (list), similarities (list), indices (list)
     """
-    # TODO: Implement search engine here
     query_vector = vectorizer.transform([query])
     query_reduced = svd.transform(query_vector)
     
@@ -53,6 +52,7 @@ def index():
 def search():
     query = request.form['query']
     documents, similarities, indices = search_engine(query)
+    indices = indices.tolist()
     return jsonify({'documents': documents, 'similarities': similarities, 'indices': indices}) 
 
 if __name__ == '__main__':
