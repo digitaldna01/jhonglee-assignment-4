@@ -7,7 +7,8 @@ import numpy as np
 import nltk
 from nltk.corpus import stopwords
 
-nltk.download('all', quiet=True)
+nltk.download('punkt')
+nltk.download('wordnet')
 nltk.download('stopwords')
 
 app = Flask(__name__)
