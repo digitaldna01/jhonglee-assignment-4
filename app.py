@@ -13,7 +13,17 @@ app = Flask(__name__)
 
 
 # TODO: Fetch dataset, initialize vectorizer and LSA here
+newsgroups = fetch_20newsgroups(subset='all')
+documents = newsgroups.data
 
+# Create the Preprocessed Term-Document Matrix using TF-IDF
+stop_words = stopwords.words('english')
+vectorizer = TfidfVectorizer(stop_words=stop_words)
+td_matrix = vectorizer.fit_transform(documents)
+
+# Apply SVD to reduce the dimensionality
+svd = TruncatedSVD(n_components=100)  # Initial top 100 dimention 
+td_matrix_reduced = svd.fit_transform(td_matrix)
 
 def search_engine(query):
     """
@@ -22,7 +32,18 @@ def search_engine(query):
     Output: documents (list), similarities (list), indices (list)
     """
     # TODO: Implement search engine here
-    # return documents, similarities, indices 
+    query_vector = vectorizer.transform([query])
+    query_reduced = svd.transform(query_vector)
+    
+    # Calculate cosine similarity between query and all documents
+    similarities = cosine_similarity(query_reduced, td_matrix_reduced).flatten()
+    
+    # Get top 5 documents based on similarity scores
+    top_indices = similarities.argsort()[-5:][::-1] # The highest 5 
+    top_documents = [documents[i] for i in top_indices]
+    top_similarities = [similarities[i] for i in top_indices]
+    
+    return top_documents, top_similarities, top_indices
 
 @app.route('/')
 def index():
