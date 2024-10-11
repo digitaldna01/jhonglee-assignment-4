@@ -4,10 +4,10 @@ FLASK_APP = app.py
 
 install:
 	python3 -m venv venv
-	. venv/bin/activate && pip install -r requirements.txt
+	./$(VENV)/bin/pip install -r requirements.txt
 
 run:
-	. venv/bin/activate && flask run --host=0.0.0.0 --port=3000
+	FLASK_APP=$(FLASK_APP) FLASK_ENV=development ./$(VENV)/bin/flask run --port 3000
 
 # Clean up virtual environment
 clean:
